@@ -8,6 +8,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
+
 /**
  * Created by kiel on 2016. 5. 18..
  */
@@ -23,12 +28,13 @@ public class EventTest {
     }
 
     @Test
-    public void addUserShouldUserHasEvent() {
+    public void startDateTimeShouldSetStartDateAndStartTime() {
         Event event = new Event();
-        User user = new User();
+        LocalDateTime startDateTime = LocalDateTime.of(2016, 5, 10, 15, 30);
+        event.setStartDateTime(startDateTime);
 
-        event.addUser(user);
-
-        assertThat(user.getEvents().size()).isEqualTo(1);
+        assertThat(event.getStartDateTime())
+                .isGreaterThanOrEqualTo(LocalDateTime.of(2016, 5, 10, 0, 0))
+                .isLessThan(LocalDateTime.of(2016, 5, 11, 0, 0));
     }
 }
