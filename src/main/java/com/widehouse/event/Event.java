@@ -45,7 +45,6 @@ public class Event {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> users;
 
-    @Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime startDateTime;
 
     @CreatedDate
@@ -65,18 +64,4 @@ public class Event {
 
         users.add(user);
     }
-
-    @Converter(autoApply = true)
-    public static class LocalDateTimeConverter implements AttributeConverter<LocalDateTime, Timestamp> {
-        @Override
-        public LocalDateTime convertToEntityAttribute(Timestamp dbData) {
-            return dbData == null ? null : dbData.toLocalDateTime();
-        }
-
-        @Override
-        public Timestamp convertToDatabaseColumn(LocalDateTime attribute) {
-            return attribute == null ? null : Timestamp.valueOf(attribute);
-        }
-    }
-
 }
