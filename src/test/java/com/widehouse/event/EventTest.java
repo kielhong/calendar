@@ -24,8 +24,11 @@ public class EventTest {
         Event event = new Event();
 
         event.addUser(new User());
-
         assertThat(event.getUsers().size()).isEqualTo(1);
+
+        event.addUser(new User());
+        assertThat(event.getUsers().size()).isEqualTo(2);
+
     }
 
     @Test
