@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
@@ -42,10 +43,10 @@ public class User {
     Set<Event> events;
 
     @CreatedDate
-    private LocalDateTime createDateTime;
+    private ZonedDateTime createDateTime;
 
     @LastModifiedDate
-    private LocalDateTime modifyDateTime;
+    private ZonedDateTime modifyDateTime;
 
     /**
      * add event to user

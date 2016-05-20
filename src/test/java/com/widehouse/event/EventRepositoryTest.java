@@ -48,22 +48,22 @@ public class EventRepositoryTest {
 
         event1 = new Event();
         event1.addUser(user);
-        event1.setStartDateTime(LocalDateTime.of(2016, 5, 1, 9, 30));
+        event1.setStartDateTime(LocalDateTime.of(2016, 5, 1, 9, 30).atZone(ZoneId.systemDefault()));
         entityManager.persist(event1);
 
         event2 = new Event();
         event2.addUser(user);
-        event2.setStartDateTime(LocalDateTime.of(2016, 5, 2, 15, 0));
+        event2.setStartDateTime(LocalDateTime.of(2016, 5, 2, 15, 0).atZone(ZoneId.systemDefault()));
         entityManager.persist(event2);
 
         event3 = new Event();
         event3.addUser(user);
-        event3.setStartDateTime(LocalDateTime.of(2016, 5, 4, 11, 0));
+        event3.setStartDateTime(LocalDateTime.of(2016, 5, 4, 11, 0).atZone(ZoneId.systemDefault()));
         entityManager.persist(event3);
 
         event4 = new Event();
         event4.addUser(user);
-        event4.setStartDateTime(LocalDateTime.of(2016, 5, 7, 20, 0));
+        event4.setStartDateTime(LocalDateTime.of(2016, 5, 7, 20, 0).atZone(ZoneId.systemDefault()));
         entityManager.persist(event4);
     }
 
@@ -71,21 +71,22 @@ public class EventRepositoryTest {
     public void testFindByUserAndDate() {
         // When
         LocalDate date = LocalDate.of(2016, 5, 1);
-        List<Event> events = eventRepository.findByUserAndStartDate(user, date.atTime(0, 0), date.atTime(23, 59));
+        List<Event> events = eventRepository.findByUserAndStartDate(user,
+                ZonedDateTime.of(date.atTime(0, 0), ZoneId.systemDefault()),
+                ZonedDateTime.of(date.atTime(23, 59), ZoneId.systemDefault()));
         // Then
         assertThat(events.size()).isEqualTo(1);
         assertThat(events).isEqualTo(Arrays.asList(event1));
     }
 
     @Test
-    public void testFindByUserAndWeek() {
+    public void testFindByUserAndBeginStartDateAndEndStartDate() {
         // When
-        LocalDate startOfWeek = LocalDate.of(2016, 5, 1);
-        LocalDate endOfWeek = startOfWeek.plusDays(6);
+        ZonedDateTime beginDateTime = LocalDateTime.of(2016, 5, 1, 0, 0).atZone(ZoneId.systemDefault());
+        ZonedDateTime endDateTime = LocalDateTime.of(2016, 5, 7, 23, 59).atZone(ZoneId.systemDefault());
         List<Event> events =
-                eventRepository.findByUserAndStartDate(user, startOfWeek.atTime(0, 0), endOfWeek.atTime(23, 59));
+                eventRepository.findByUserAndStartDate(user, beginDateTime, endDateTime);
         // Then
-        assertThat(events.size()).isEqualTo(4);
         assertThat(events).isEqualTo(Arrays.asList(event1, event2, event3, event4));
     }
 }

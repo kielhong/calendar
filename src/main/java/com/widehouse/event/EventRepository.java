@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
@@ -15,6 +16,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     @Query("SELECT event FROM Event event "
             + " WHERE :user MEMBER OF event.users AND event.startDateTime BETWEEN :begin AND :end")
     List<Event> findByUserAndStartDate(@Param("user") User user,
-                                       @Param("begin") LocalDateTime beginStartDateTime,
-                                       @Param("end") LocalDateTime endStartDateTime);
+                                       @Param("begin") ZonedDateTime beginStartDateTime,
+                                       @Param("end") ZonedDateTime endStartDateTime);
 }

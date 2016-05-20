@@ -18,4 +18,6 @@ public interface EventService {
 
     List<Event> listUserEventByWeek(User user, LocalDate firstDayOfWeek);
 
+    List<Event> listUserEventByMonth(User user, LocalDate currentDate);
+
 }

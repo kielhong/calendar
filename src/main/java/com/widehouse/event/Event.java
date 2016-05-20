@@ -1,23 +1,17 @@
 package com.widehouse.event;
 
 import com.widehouse.user.User;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.AttributeConverter;
-import javax.persistence.Convert;
-import javax.persistence.Converter;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -45,13 +39,20 @@ public class Event {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> users;
 
-    private LocalDateTime startDateTime;
+    private String title;
+
+    @Column(length = 2000)
+    private String description;
+
+    private ZonedDateTime startDateTime;
+
+    private ZonedDateTime endDateTime;
 
     @CreatedDate
-    private LocalDateTime createDateTime;
+    private ZonedDateTime createDateTime;
 
     @LastModifiedDate
-    private LocalDateTime modifyDateTime;
+    private ZonedDateTime modifyDateTime;
 
     /**
      * add user to event
