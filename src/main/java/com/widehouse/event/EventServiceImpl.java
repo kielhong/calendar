@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.TemporalField;
 import java.util.List;
 
 /**
@@ -31,7 +32,17 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public List<Event> listUserEventByBetweenDay(User user, LocalDate startDate, LocalDate endDate) {
+        return eventRepository.findByUserAndStartDate(user, startDate.atTime(0, 0), endDate.atTime(23, 59));
+    }
+
+    @Override
     public List<Event> listUserEventByDay(User user, LocalDate date) {
-        return eventRepository.findByUserAndStartDate(user, date.atTime(0, 0), date.atTime(0, 0).plusDays(1));
+        return listUserEventByBetweenDay(user, date, date);
+    }
+
+    @Override
+    public List<Event> listUserEventByWeek(User user, LocalDate firstDayOfWeek) {
+        return listUserEventByBetweenDay(user, firstDayOfWeek, firstDayOfWeek.plusDays(6));
     }
 }

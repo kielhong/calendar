@@ -36,10 +36,34 @@ public class EventServiceTest {
 
     User user;
 
+    Event event1;
+    Event event2;
+    Event event3;
+    Event event4;
+    Event event5;
+
     @Before
     public void setup() {
         user = new User();
         userRepository.save(user);
+
+        eventService = new EventServiceImpl(eventRepository);
+        event1 = new Event();
+        event1.setStartDateTime(LocalDateTime.of(2016, 5, 1, 10, 30));
+        eventService.createEvent(user, event1);
+        event2 = new Event();
+        event2.setStartDateTime(LocalDateTime.of(2016, 5, 1, 12, 0));
+        eventService.createEvent(user, event2);
+        event3 = new Event();
+        event3.setStartDateTime(LocalDateTime.of(2016, 5, 4, 9, 0));
+        eventService.createEvent(user, event3);
+        event4 = new Event();
+        event4.setStartDateTime(LocalDateTime.of(2016, 5, 7, 20, 00));
+        eventService.createEvent(user, event4);
+        event5 = new Event();
+        event5.setStartDateTime(LocalDateTime.of(2016, 5, 8, 0, 30));
+        eventService.createEvent(user, event5);
+
     }
 
     @Test
@@ -56,23 +80,43 @@ public class EventServiceTest {
         assertThat(user.getEvents()).contains(event);
     }
 
+
+    @Test
+    public void listUserEventByBetweenDayShouldListEventBetweenTwodays() {
+        // Given
+        given(eventRepository.findByUserAndStartDate(user,
+                LocalDateTime.of(2016, 5, 1, 0, 0), LocalDateTime.of(2016, 5, 4, 23, 59)))
+                .willReturn((Arrays.asList(event1, event2, event3)));
+        // When
+        List<Event> events =
+                eventService.listUserEventByBetweenDay(user, LocalDate.of(2016, 5, 1), LocalDate.of(2016, 5, 4));
+        // then
+        assertThat(events).isEqualTo(Arrays.asList(event1, event2, event3));
+    }
+
     @Test
     public void listUserEventByDayShouldListSameDayEventsOfUser() {
         // Given
-        eventService = new EventServiceImpl(eventRepository);
-        Event eventDto1 = new Event();
-        eventDto1.setStartDateTime(LocalDateTime.of(2016, 5, 1, 10, 30));
-        Event eventDto2 = new Event();
-        eventDto2.setStartDateTime(LocalDateTime.of(2016, 5, 1, 12, 00));
-        eventService.createEvent(user, eventDto1);
-        eventService.createEvent(user, eventDto2);
         given(eventRepository.findByUserAndStartDate(user,
                 LocalDateTime.of(2016, 5, 1, 0, 0),
-                LocalDateTime.of(2016, 5, 2, 0, 0)))
-                .willReturn(Arrays.asList(eventDto1, eventDto2));
+                LocalDateTime.of(2016, 5, 1, 23, 59)))
+                .willReturn(Arrays.asList(event1, event2));
         // When
         List<Event> events = eventService.listUserEventByDay(user, LocalDate.of(2016, 5, 1));
         // Then
-        assertThat(events).isEqualTo(Arrays.asList(eventDto1, eventDto2));
+        assertThat(events).isEqualTo(Arrays.asList(event1, event2));
     }
+
+    @Test
+    public void listUserEventByWeekShouldListSameWeekEvents() {
+        // Given
+        given(eventRepository.findByUserAndStartDate(user,
+                LocalDateTime.of(2016, 5, 1, 0, 0), LocalDateTime.of(2016, 5, 7, 23, 59)))
+                .willReturn((Arrays.asList(event1, event2, event3, event4)));
+        // When
+        List<Event> events = eventService.listUserEventByWeek(user, LocalDate.of(2016, 5, 1));
+        // then
+        assertThat(events).isEqualTo(Arrays.asList(event1, event2, event3, event4));
+    }
+
 }
