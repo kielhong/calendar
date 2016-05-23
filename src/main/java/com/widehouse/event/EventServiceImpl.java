@@ -5,14 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by kiel on 2016. 5. 19..
@@ -40,10 +38,10 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> listUserEventByBetweenDay(User user, LocalDate beginDate, LocalDate endDate) {
-        ZonedDateTime begineDateTime = ZonedDateTime.of(beginDate.atTime(0, 0), ZoneId.systemDefault());
+        ZonedDateTime beginDateTime = ZonedDateTime.of(beginDate.atTime(0, 0), ZoneId.systemDefault());
         ZonedDateTime endDateTime = ZonedDateTime.of(endDate.atTime(23, 59), ZoneId.systemDefault());
 
-        return eventRepository.findByUserAndStartDate(user, begineDateTime, endDateTime);
+        return eventRepository.findByUserAndStartDate(user, beginDateTime, endDateTime);
     }
 
     @Override
@@ -53,7 +51,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> listUserEventByWeek(User user, LocalDate currentDate) {
-        LocalDate firstDayOfWeek = currentDate.with(WeekFields.SUNDAY_START.dayOfWeek(), 1);
+        LocalDate firstDayOfWeek = currentDate.with(WeekFields.of(Locale.KOREA).dayOfWeek(), 1);
         LocalDate lastDayOfWeek = firstDayOfWeek.plusDays(6);
 
         return listUserEventByBetweenDay(user, firstDayOfWeek, lastDayOfWeek);

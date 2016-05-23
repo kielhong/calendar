@@ -1,5 +1,6 @@
 package com.widehouse.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.widehouse.event.Event;
 import lombok.Data;
 import lombok.Getter;
@@ -11,8 +12,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -28,7 +32,7 @@ import javax.persistence.ManyToMany;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "events")
 public class User {
     @Id
     @GeneratedValue
@@ -36,6 +40,7 @@ public class User {
 
     String email;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "event_user",
             joinColumns = @JoinColumn(name = "user_id"),

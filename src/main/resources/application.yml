@@ -8,6 +8,9 @@ spring:
       hibernate.tool.hbm2ddl: trace
     show-sql: true
     hibertnate.ddl-auto: create-drop
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
   h2:
     console:
       enabled: true

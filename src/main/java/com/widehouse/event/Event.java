@@ -27,7 +27,6 @@ import javax.persistence.ManyToMany;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-@ToString(exclude = {"users"})
 public class Event {
     @Id
     @GeneratedValue
