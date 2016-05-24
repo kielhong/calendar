@@ -64,4 +64,14 @@ public class Event {
 
         users.add(user);
     }
+
+    /**
+     * remove user from event
+     * @param user
+     */
+    public void removeUser(User user) {
+        if (user != null) {
+            users.remove(user);
+        }
+    }
 }

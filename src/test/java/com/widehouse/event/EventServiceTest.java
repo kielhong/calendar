@@ -81,16 +81,47 @@ public class EventServiceTest {
     @Test
     public void createEventShouldCreateEventAndUserMutual() {
         // Given
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime startDateTime = LocalDateTime.of(2016, 5, 1, 10, 30).atZone(zoneId);
+        ZonedDateTime endDateTime = startDateTime.plusHours(1);
         Event eventDto = new Event();
-        eventDto.setStartDateTime(ZonedDateTime.of(LocalDateTime.of(2016, 5, 1, 10, 30), ZoneId.systemDefault()));
+        eventDto.setStartDateTime(startDateTime);
+        eventDto.setEndDateTime(endDateTime);
         // When
         Event event = eventService.createEvent(user, eventDto);
         // Then
         assertThat(event.getUsers().size()).isEqualTo(1);
         assertThat(event.getUsers()).contains(user);
         assertThat(event.getStartDateTime())
-                .isEqualTo(LocalDateTime.of(2016, 5, 1, 10, 30).atZone(ZoneId.systemDefault()));
+                .isEqualTo(LocalDateTime.of(2016, 5, 1, 10, 30).atZone(zoneId));
+        assertThat(event.getEndDateTime())
+                .isEqualTo(LocalDateTime.of(2016, 5, 1, 11, 30).atZone(zoneId));
         assertThat(user.getEvents()).contains(event);
+    }
+
+    @Test
+    public void addUserShouldAddUserToEvent() {
+        // Given
+        Event event = eventService.createEvent(user, event1);
+        User user2 = new User();
+        // When
+        Event updateEvent = eventService.addUser(event, user2);
+        // Then
+        assertThat(updateEvent.getUsers().size()).isEqualTo(2);
+        assertThat(user2.getEvents()).contains(updateEvent);
+    }
+
+    @Test
+    public void removeUserShouldRemoveUserFromEvent() {
+        // Given
+        Event event = eventService.createEvent(user, event1);
+        User user2 = new User();
+        Event updateEvent = eventService.addUser(event, user2);
+        // When
+        eventService.removeUser(event, user2);
+        // Then
+        assertThat(updateEvent.getUsers().size()).isEqualTo(1);
+        assertThat(user2.getEvents()).doesNotContain(updateEvent);
     }
 
 

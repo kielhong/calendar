@@ -69,6 +69,8 @@ public class User {
      * @param event Event
      */
     public void removeEvent(Event event) {
-        events.remove(event);
+        if (events != null) {
+            events.remove(event);
+        }
     }
 }

@@ -12,6 +12,10 @@ import java.util.List;
 public interface EventService {
     Event createEvent(User user, Event eventDto);
 
+    Event addUser(Event event, User newUser);
+
+    Event removeUser(Event event, User user);
+
     List<Event> listUserEventByBetweenDay(User user, LocalDate startDate, LocalDate endDate);
 
     List<Event> listUserEventByDay(User user, LocalDate date);

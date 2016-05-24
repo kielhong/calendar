@@ -4,6 +4,8 @@ import com.widehouse.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -11,6 +13,7 @@ import java.time.ZonedDateTime;
 import java.time.temporal.WeekFields;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Created by kiel on 2016. 5. 19..
@@ -25,15 +28,45 @@ public class EventServiceImpl implements EventService {
         this.eventRepository = eventRepository;
     }
 
+    @Transactional
     @Override
     public Event createEvent(User user, Event eventDto) {
         Event event = new Event();
         event.setStartDateTime(eventDto.getStartDateTime());
+        event.setEndDateTime(eventDto.getEndDateTime());
         event.addUser(user);
 
         user.addEvent(event);
 
         return event;
+    }
+
+    @Transactional
+    @Override
+    public Event addUser(Event event, User user) {
+        Assert.notNull(event);
+        Assert.notNull(user);
+
+        event.addUser(user);
+        eventRepository.save(event);
+
+        user.addEvent(event);
+
+        return event;
+    }
+
+    @Transactional
+    @Override
+    public Event removeUser(Event event, User user) {
+        Assert.notNull(event);
+        Assert.notNull(user);
+
+        event.removeUser(user);
+        eventRepository.save(event);
+
+        user.removeEvent(event);
+
+        return null;
     }
 
     @Override
