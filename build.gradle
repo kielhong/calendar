@@ -37,9 +37,11 @@ dependencies {
 	compile('org.hibernate:hibernate-java8:5.1.0.Final')
 //	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 
 	compile('org.projectlombok:lombok')
 	compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.7.4')
+	compile('org.thymeleaf.extras:thymeleaf-extras-java8time:2.1.0.RELEASE')
 
 	runtime('com.h2database:h2')
 
