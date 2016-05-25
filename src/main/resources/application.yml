@@ -1,22 +1,31 @@
 spring:
   datasource:
+#    driver-class-name: org.mariadb.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/calendar
+#    username: calendar
+#    password: cal123!@#
       driver-class-name: org.h2.Driver
       url: jdbc:h2:mem:testdb;MODE=MYSQL;DB_CLOSE_ON_EXIT=FALSE
   jpa:
     properties:
-      hibernate.format_sql: true
-      hibernate.tool.hbm2ddl: trace
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        format_sql: true
+        tool.hbm2ddl: trace
     show-sql: true
     hibernate:
       ddl-auto: validate
+  flyway:
+    enabled: false
   jackson:
     serialization:
       write-dates-as-timestamps: false
   thymeleaf:
     cache: false
-  h2:
-    console:
-      enabled: true
+#  h2:
+#    console:
+#      enabled: true
+
 logging:
   level:
     com.widehouse: DEBUG
