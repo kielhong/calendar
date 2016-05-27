@@ -3,16 +3,16 @@ package com.widehouse.event;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-import com.widehouse.CalendarApplication;
 import com.widehouse.user.User;
 import com.widehouse.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
@@ -26,15 +26,15 @@ import java.util.List;
  * Created by kiel on 2016. 5. 19..
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {CalendarApplication.class})
+@SpringBootTest
 @Slf4j
 public class EventServiceTest {
-    @MockBean
-    private EventRepository eventRepository;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private EventService eventService;
+    @Mock
+    private EventRepository eventRepository;
+    @InjectMocks
+    private EventService eventService = new EventServiceImpl();
 
     User user;
 
@@ -54,7 +54,6 @@ public class EventServiceTest {
         user = new User();
         userRepository.save(user);
 
-        eventService = new EventServiceImpl(eventRepository);
         event1 = new Event();
         event1.setStartDateTime(ZonedDateTime.of(LocalDateTime.of(2016, 5, 1, 10, 30), ZoneId.systemDefault()));
         eventService.createEvent(user, event1);

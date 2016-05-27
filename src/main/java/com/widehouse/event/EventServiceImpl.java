@@ -13,7 +13,6 @@ import java.time.ZonedDateTime;
 import java.time.temporal.WeekFields;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 /**
  * Created by kiel on 2016. 5. 19..
@@ -21,12 +20,8 @@ import java.util.Set;
 @Service
 @Slf4j
 public class EventServiceImpl implements EventService {
-    private EventRepository eventRepository;
-
     @Autowired
-    public EventServiceImpl(EventRepository eventRepository) {
-        this.eventRepository = eventRepository;
-    }
+    private EventRepository eventRepository;
 
     @Transactional
     @Override
