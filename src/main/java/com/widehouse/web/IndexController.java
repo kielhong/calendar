@@ -48,7 +48,6 @@ public class IndexController {
         model.addAttribute("defaultDate", defaultDate);
         model.addAttribute("events", events.stream().map(EventView::new).collect(Collectors.toList()));
 
-
         return "index";
     }
 }
