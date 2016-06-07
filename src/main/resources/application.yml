@@ -22,10 +22,9 @@ spring:
       write-dates-as-timestamps: false
   thymeleaf:
     cache: false
-#  h2:
-#    console:
-#      enabled: true
-
+  h2:
+    console:
+      enabled: true
 logging:
   level:
     com.widehouse: DEBUG
